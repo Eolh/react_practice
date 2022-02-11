@@ -8,6 +8,7 @@ function User({ user }){
     )
 }
 
+/* Practice add array items */
 function UserList2({ users }){
     return (
         <div>
@@ -18,4 +19,4 @@ function UserList2({ users }){
     )
 }
 
-export default UserList2;
+export default React.memo(UserList2);

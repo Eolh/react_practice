@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import Hello from './Hello';
 import Hello2 from './Hello2';
 import Hello3 from './Hello3';
@@ -13,10 +13,15 @@ import UserList2 from './UserList2';
 import CreateUser from './CreateUser';
 import UserList3 from './UserList3';
 import UserList4 from './UserList4';
+import UserList5 from './UserList5';
 
 import logo from './logo.svg';
 import './App.css';
 
+function countActiveUsers(users){
+  console.log("Counting actived users..");
+  return users.filter(user => user.active).length;
+}
 
 function App() {
   const name = "react";
@@ -34,13 +39,14 @@ function App() {
 
   const {username, email} = inputs;
 
-  const onChange = e => {
-    const {name, value} = e.target;
-    setInputs({
-      ...inputs,
-      [name] : value
-    })
-  }
+  const onChange = useCallback(e => {
+      const {name, value} = e.target;
+      setInputs({
+        ...inputs,
+        [name] : value
+      })
+    },[]
+  );
 
   const [users, setUsers] = useState([
     {
@@ -65,14 +71,15 @@ function App() {
 
   const nextId  = useRef(4);
 
-  const onCreate = () => {
+  const onCreate = useCallback(() => {
     const user = {
       id : nextId.current,
       username,
       email
     };
 
-    setUsers([...users, user]);
+    //setUsers([...users, user]);
+    setUsers(users.concat(user));
 
     setInputs({
       username : '',
@@ -80,17 +87,24 @@ function App() {
     })
 
     nextId.current += 1;
-  }
+    }, [username, email]
+  );
 
-  const onRemove = id => {
-    setUsers(users.filter(user => user.id !== id));
-  }
+  const onRemove = useCallback(
+    id => {
+      setUsers(users.filter(user => user.id !== id));
+    }, []
+  );
 
-  const onToggle = id => {
-    setUsers(
-      users.map(user => user.id === id ? {...user, active : !user.active} : user)
-    )
-  }
+  const onToggle = useCallback(
+    id => {
+      setUsers(
+        users.map(user => user.id === id ? {...user, active : !user.active} : user)
+      )
+    }, []
+  );
+
+  const count = useMemo(() => countActiveUsers(users), [users]);
 
   return (
     <> {/* react needs close tag
@@ -132,11 +146,12 @@ function App() {
       {/* Array test */}
       <UserList />
       <br />
-      <CreateUser username = {username} email = {email} onChange = {onChange} onCreate = {onCreate} />
-      <UserList2 users = {users} />
-      <UserList3 users = {users} onRemove = {onRemove} />
-      <UserList4 users = {users} onRemove = {onRemove} onToggle = {onToggle} />
-
+      <CreateUser username = {username} email = {email} onChange = {onChange} onCreate = {onCreate} /> {/* add array items test */}
+      <UserList2 users = {users} /> {/* add array items test */}
+      <UserList3 users = {users} onRemove = {onRemove} /> {/* remove array items test */}
+      <UserList4 users = {users} onRemove = {onRemove} onToggle = {onToggle} /> {/* update array items test */}
+      <UserList5 users = {users} onRemove = {onRemove} onToggle = {onToggle} /> {/* update array items test */}
+      <div>active user : {count} </div> {/* useMemo test */}
       {/* Array test */}
 
       <div className = "App">

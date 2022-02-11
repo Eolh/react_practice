@@ -9,6 +9,7 @@ function User({ user, onRemove }){
     )
 }
 
+/* Practice remove array items */
 function UserList3({ users, onRemove }){
     return (
         <div>
@@ -19,4 +20,4 @@ function UserList3({ users, onRemove }){
     )
 }
 
-export default UserList3;
+export default React.memo(UserList3);

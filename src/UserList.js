@@ -8,7 +8,7 @@ function Users({ user }){
     )
 }
 
-// Practice array rendering
+/* Practice array rendering */
 function UserList(){
     const users = [ /* duplicate key in same array, occur error */
         {

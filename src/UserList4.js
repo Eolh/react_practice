@@ -1,5 +1,6 @@
 import React from "react";
 
+
 function User({ user, onRemove, onToggle }){
     return (
         <div>
@@ -9,6 +10,7 @@ function User({ user, onRemove, onToggle }){
     )
 }
 
+/* Practice update array items */
 function UserList4({ users, onRemove, onToggle }){
     return (
         <div>
@@ -19,4 +21,4 @@ function UserList4({ users, onRemove, onToggle }){
     )
 }
 
-export default UserList4;
+export default React.memo(UserList4);
